@@ -16,9 +16,38 @@ class FileObject:
                              "name_associations.txt":self.name}#,\
                              #"rating_associations.txt":self.rating}
         #need to fix the various
-
+        self.store_file()
 
     def store_file(self):
+        path_str = f"./FileInfo/StoredFiles/{self.num}"
+        with open(path_str,'w') as f:
+            f.write(self.path)
+
+    def add_keyword(self,keyword):
+        self.keyword.append(keyword)
+        keyword_path_str = "./FileInfo/Associations/keyword_associations.txt"
+        file_arr = []
+        with open(keyword_path_str, 'r') as f:
+            file_arr = f.readlines()
+        with open(keyword_path_str, 'w') as f:
+            checked = False
+            for line_idx in range(len(file_arr)):
+                line = file_arr[line_idx]
+                match = line[:line.find(":")]
+                if match == keyword:
+                    checked = True
+                    if f'-{self.num}-' not in line:
+                        file_arr[line_idx] = line[:-1] + f'-{self.num}-\n'
+                    break
+            if not checked:
+                file_arr.append(f'{keyword}:-{self.num}-\n')
+            for line in file_arr:
+                f.write(line)
+
+
+
+#save file should probably not be used
+    def save_file(self):
         path_str = "./FileInfo/Associations/"
         for file_name in self.associations.keys():
             file_arr = []
