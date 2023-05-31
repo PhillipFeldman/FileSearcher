@@ -57,7 +57,7 @@ class FileObject:
             for line_idx in range(len(file_arr)):
                 line = file_arr[line_idx]
                 match = line[:line.find(":")]
-                if match == rating:
+                if match == str(rating):
                     checked = True
                     if f'-{self.num}-' not in line:
                         file_arr[line_idx] = line[:-1] + f'-{self.num}-\n'
