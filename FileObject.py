@@ -61,9 +61,13 @@ class FileObject:
                     checked = True
                     if f'-{self.num}-' not in line:
                         file_arr[line_idx] = line[:-1] + f'-{self.num}-\n'
-                    break
+                else:
+                    if f'-{self.num}-' in line:
+                        place = line.find(f'-{self.num}-')
+                        size = len(f'-{self.num}-')
+                        file_arr[line_idx] = line[:place] + line[place+size:]
             if not checked:
-                file_arr.append(f'{keyword}:-{self.num}-\n')
+                file_arr.append(f'{rating}:-{self.num}-\n')
             for line in file_arr:
                 f.write(line)
 
