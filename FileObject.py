@@ -7,6 +7,7 @@ class FileObject:
         self.keyword = []
         self.category = []
         self.rating = "unrated"
+        self.change_rating("unrated")
         self.password = None
         self.name = ""
         self.description = ""
@@ -35,6 +36,28 @@ class FileObject:
                 line = file_arr[line_idx]
                 match = line[:line.find(":")]
                 if match == keyword:
+                    checked = True
+                    if f'-{self.num}-' not in line:
+                        file_arr[line_idx] = line[:-1] + f'-{self.num}-\n'
+                    break
+            if not checked:
+                file_arr.append(f'{keyword}:-{self.num}-\n')
+            for line in file_arr:
+                f.write(line)
+
+    def change_rating(self,rating):
+        assert rating == "unrated" or (type(rating) == int and 0 <= int(rating) <= 100)
+        self.rating = rating
+        rating_path_str = "./FileInfo/Associations/rating_associations.txt"
+        file_arr = []
+        with open(rating_path_str, 'r') as f:
+            file_arr = f.readlines()
+        with open(rating_path_str, 'w') as f:
+            checked = False
+            for line_idx in range(len(file_arr)):
+                line = file_arr[line_idx]
+                match = line[:line.find(":")]
+                if match == rating:
                     checked = True
                     if f'-{self.num}-' not in line:
                         file_arr[line_idx] = line[:-1] + f'-{self.num}-\n'
