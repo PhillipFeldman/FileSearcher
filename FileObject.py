@@ -1,28 +1,45 @@
 import os
 import sys
 class FileObject:
-    def __init__(self, path):
-        self.num = self.count_files()
+
+
+    def __init__(self, path, load=False):
+        if not load:
+            self.num = self.count_files()
+            self.path = path
+            self.keyword = []
+            self.password = None
+            self.description = ""
+            self.store_file()
+            self.rating = "unrated"
+            self.change_rating("unrated")
+        else:
+            self.load_file_object(path)
+
+    def load_file_object(self,path):
         self.path = path
         self.keyword = []
-        self.category = {}
-        self.rating = "unrated"
-        self.change_rating("unrated")
         self.password = None
-        self.name = ""
         self.description = ""
-        self.hash = ""
-        self.associations = {"category_associations.txt":self.category,\
-                             "keyword_associations.txt":self.keyword,\
-                             "name_associations.txt":self.name}#,\
-                             #"rating_associations.txt":self.rating}
-        #need to fix the various
-        self.store_file()
+        file_arr = []
+
+        with open('./FileInfo/FileNums/paths.txt','r') as f:
+            file_arr = f.readlines()
+            for line in file_arr:
+                if path == line[line.find(':')+1:-1]:
+                    self.num = line[:line.find(':')]
+                    break
+        with open(f'./FileInfo/FileNums/{self.num}.txt', 'r') as f:
+            file_arr = f.readlines()
+            self.rating = file_arr[1][file_arr[1].find(':')+1:-1]
+            self.keyword = [line.strip() for line in file_arr[3:]]
 
     def store_file_num(self):
         path_str = f"./FileInfo/FileNums/{self.num}.txt"
         with open(path_str, 'w') as f:
-            f.write(self.path)
+            f.write(f'PATH:{self.path}\n')
+            f.write(f'RATING:unrated\n')
+            f.write(f'KEYWORDS:\n')
 
     def store_file_path(self):
         path_str = f"./FileInfo/FileNums/paths.txt"
@@ -46,22 +63,32 @@ class FileObject:
     def add_keyword(self,keyword):
         self.keyword.append(keyword)
         keyword_path_str = f"./FileInfo/Associations/KeywordAssociations/{keyword}.txt"
+        file_path_str = f"./FileInfo/FileNums/{self.num}.txt"
         file_arr = []
+
         try:
             with open(keyword_path_str, 'r') as f:
                 file_arr = f.readlines()
         except FileNotFoundError:
             with open(keyword_path_str, 'w') as f:
                 f.write(f'-{self.num}-\n')
+            with open(file_path_str,'a') as f:
+                f.write(f'{keyword}\n')
                 return
 
         with open(keyword_path_str, 'a') as f:
             if f'-{self.num}-\n' not in file_arr:
                 f.write(f'-{self.num}-\n')
+                with open(file_path_str,'a') as g:
+                    g.write(f'{keyword}\n')
 
     def remove_keyword(self,keyword):
-        self.keyword.append(keyword)
+        try:
+            self.keyword.remove(keyword)
+        except ValueError:
+            return
         keyword_path_str = f"./FileInfo/Associations/KeywordAssociations/{keyword}.txt"
+        file_path_str = f"./FileInfo/FileNums/{self.num}.txt"
         file_arr = []
         try:
             with open(keyword_path_str, 'r') as f:
@@ -78,11 +105,31 @@ class FileObject:
             except ValueError:
                 return
 
+        file_arr = []
+        try:
+            with open(file_path_str, 'r') as f:
+                file_arr = f.readlines()
+        except FileNotFoundError:
+                return
+
+        with open(file_path_str, 'w') as f:
+            file_arr.remove(f'{keyword}\n')
+            for line in file_arr:
+                f.write(line)
+
     def change_rating(self,rating):
         assert rating == "unrated" or (type(rating) == int and 0 <= int(rating) <= 100)
         self.rating = rating
         rating_path_str = "./FileInfo/Associations/rating_associations.txt"
+        file_path_str = f"./FileInfo/FileNums/{self.num}.txt"
         file_arr = []
+        with open(file_path_str, 'r') as f:
+            file_arr = f.readlines()
+        file_arr[1] = f'RATING:{self.rating}\n'
+        with open(file_path_str, 'w') as f:
+            for line in file_arr:
+                f.write(line)
+
         with open(rating_path_str, 'r') as f:
             file_arr = f.readlines()
         with open(rating_path_str, 'w') as f:
