@@ -5,7 +5,7 @@ class FileObject:
         self.num = self.count_files()
         self.path = path
         self.keyword = []
-        self.category = []
+        self.category = {}
         self.rating = "unrated"
         self.change_rating("unrated")
         self.password = None
@@ -19,31 +19,64 @@ class FileObject:
         #need to fix the various
         self.store_file()
 
-    def store_file(self):
-        path_str = f"./FileInfo/StoredFiles/{self.num}"
-        with open(path_str,'w') as f:
+    def store_file_num(self):
+        path_str = f"./FileInfo/FileNums/{self.num}.txt"
+        with open(path_str, 'w') as f:
             f.write(self.path)
+
+    def store_file_path(self):
+        path_str = f"./FileInfo/FileNums/paths.txt"
+        with open(path_str, 'a') as f:
+            f.write(f'{self.num}:{self.path}\n')
+
+
+    def store_file(self):
+        self.store_file_num()
+        self.store_file_path()
+
+
+    """#does length really belong in media_type?
+    self.catogery ={
+    "media_type":{"video":{"file_type":["mp4","wav","webm"],"length":["long","short"]}}},
+    "
+    }
+    """
+
 
     def add_keyword(self,keyword):
         self.keyword.append(keyword)
-        keyword_path_str = "./FileInfo/Associations/keyword_associations.txt"
+        keyword_path_str = f"./FileInfo/Associations/KeywordAssociations/{keyword}.txt"
         file_arr = []
-        with open(keyword_path_str, 'r') as f:
-            file_arr = f.readlines()
+        try:
+            with open(keyword_path_str, 'r') as f:
+                file_arr = f.readlines()
+        except FileNotFoundError:
+            with open(keyword_path_str, 'w') as f:
+                f.write(f'-{self.num}-\n')
+                return
+
+        with open(keyword_path_str, 'a') as f:
+            if f'-{self.num}-\n' not in file_arr:
+                f.write(f'-{self.num}-\n')
+
+    def remove_keyword(self,keyword):
+        self.keyword.append(keyword)
+        keyword_path_str = f"./FileInfo/Associations/KeywordAssociations/{keyword}.txt"
+        file_arr = []
+        try:
+            with open(keyword_path_str, 'r') as f:
+                file_arr = f.readlines()
+        except FileNotFoundError:
+                return
+
         with open(keyword_path_str, 'w') as f:
-            checked = False
-            for line_idx in range(len(file_arr)):
-                line = file_arr[line_idx]
-                match = line[:line.find(":")]
-                if match == keyword:
-                    checked = True
-                    if f'-{self.num}-' not in line:
-                        file_arr[line_idx] = line[:-1] + f'-{self.num}-\n'
-                    break
-            if not checked:
-                file_arr.append(f'{keyword}:-{self.num}-\n')
-            for line in file_arr:
-                f.write(line)
+            try:
+                file_arr.remove(f'-{self.num}-\n')
+                for line in file_arr:
+                    f.write(line)
+
+            except ValueError:
+                return
 
     def change_rating(self,rating):
         assert rating == "unrated" or (type(rating) == int and 0 <= int(rating) <= 100)
