@@ -1,4 +1,0 @@
-PATH:test1
-RATING:3
-KEYWORDS:
-dog
