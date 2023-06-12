@@ -61,7 +61,8 @@ class FileObject:
 
 
     def add_keyword(self,keyword):
-        self.keyword.append(keyword)
+        if keyword not in self.keyword:
+            self.keyword.append(keyword)
         keyword_path_str = f"./FileInfo/Associations/KeywordAssociations/{keyword}.txt"
         file_path_str = f"./FileInfo/FileNums/{self.num}.txt"
         file_arr = []
