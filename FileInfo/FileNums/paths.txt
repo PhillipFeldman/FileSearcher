@@ -1,8 +1,2 @@
-1:test2
-2:test1
-3:test2
-4:test1
-5:test2
-6:test1
-7:test2
-8:test3
+1:C:/Users/phill/Pictures/art/shirtPic.jfif
+2:C:/Users/phill/Pictures/art/shirtpic.jpeg
