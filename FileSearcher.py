@@ -56,20 +56,68 @@ def add_keywords(filenames,str_filenames):
     close_button = tk.Button(add_window,text="Done adding keywords",command=add_window.destroy)
     close_button.pack()
 
+def complete_remove_keywords(filenames,keyword):
+    global file_set
+    obj = None
+
+    for file_path in filenames:
+        loaded = file_path in file_set
+        obj = FileObject(file_path, loaded)
+        obj.remove_keyword(keyword)
+        if not loaded:
+            file_set.add(file_path)
+    obj = None
+
+def remove_keywords(filenames,str_filenames):
+
+    remove_window = tk.Tk()
+    label = tk.Label(remove_window, text=f'{str_filenames}Type a keyword to remove to the above files')
+    label.pack(expand=True)
+    e = tk.Entry(remove_window,borderwidth=6)
+    e.pack()
+    remove_button = tk.Button(remove_window,text="remove the keyword to the file(s)",\
+                           command= lambda:complete_remove_keywords(filenames,e.get()))
+    remove_button.pack()
+    close_button = tk.Button(remove_window,text="Done removing keywords",command=remove_window.destroy)
+    close_button.pack()
 
 
+def complete_rating_files(filenames,rating):
+    global file_set
+    obj = None
+    if rating!="unrated":
+        rating = int(rating)
 
-def rate_file(filenames):
-    print("rate",filenames)
+    for file_path in filenames:
+        loaded = file_path in file_set
+        obj = FileObject(file_path, loaded)
+        obj.change_rating(rating)
+        if not loaded:
+            file_set.add(file_path)
+    obj = None
 
-def remove_keywords(filenames):
-    print("remove",filenames)
+
+def rate_file(filenames,str_filenames):
+    rate_window = tk.Tk()
+    label = tk.Label(rate_window, text=f'{str_filenames}Rate the files from 0-10 or unrated')
+    label.pack(expand=True)
+    clicked = tk.StringVar()
+    answer_choices = ["unrated"]+[str(i) for i in range(11)]
+    print(answer_choices)
+    clicked.set(answer_choices[0])
+    drop = ttk.OptionMenu(rate_window,clicked,*answer_choices)
+    drop.pack(expand=True)
+
+
+    rate_button = tk.Button(rate_window, text="Rate the file(s)", \
+                           command=lambda: complete_rating_files(filenames, clicked.get()))
+    rate_button.pack()
+    close_button = tk.Button(rate_window, text="Done rating files", command=rate_window.destroy)
+    close_button.pack()
+
+
 
 def file_explorer():
-
-
-
-
     filetypes = (
         ('All files', '*.*')
     )
@@ -91,7 +139,7 @@ def file_explorer():
     rate_button = tk.Button(
         window,
         text=f'Rate the File',
-        command=lambda:rate_file(filenames)
+        command=lambda:rate_file(filenames,strfilenames)
     )
     add_keyword_button = tk.Button(
         window,
@@ -100,8 +148,8 @@ def file_explorer():
     )
     remove_keyword_button = tk.Button(
         window,
-        text=f'remove keywords',
-        command=lambda: remove_keywords(filenames)
+        text=f'Remove keywords',
+        command=lambda: remove_keywords(filenames,strfilenames)
     )
     finished_button = tk.Button(
         window,
