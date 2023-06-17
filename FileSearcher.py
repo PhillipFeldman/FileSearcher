@@ -19,6 +19,7 @@ class Search_Store():
         self.search_all = False
         self.rating_set = set({})
         self.search_by_keyword = False
+        self.search_by_rating = False
 
 
 # create the root window
@@ -195,9 +196,23 @@ def add_remove_keyword(var,keyword_set,keyword,search_store):
     search_store.keyword_set = keyword_set
     print(keyword_set)
 
+
+def add_remove_rating(var,ratings_set,rating,search_store):
+    var.set(not var.get())
+    if var.get():
+        ratings_set.add(rating)
+    else:
+        ratings_set.remove(rating)
+
+
+    search_store.rating_set = ratings_set
+    print(ratings_set)
+
 def create_keyword_check_lambda(var,keyword_set,keyword,search_store):
     return lambda: add_remove_keyword(var,keyword_set,keyword,search_store)
 
+def create_ratings_check_lambda(var,ratings_set,rating,search_store):
+    return lambda: add_remove_rating(var,ratings_set,rating,search_store)
 
 def create_keywords_frame(window,search_store):
     keywords_frame = tk.Frame(window)
@@ -248,6 +263,65 @@ def create_keywords_frame(window,search_store):
     keyword_check.var = keyword_var
     keyword_check.grid(row=0, column=0)
 
+
+def rating_frame(window,rating_var,search_store):
+
+    if (rating_var):
+        print("keyword checked")
+    else:
+        print("unchecked")
+    search_store.search_by_rating = rating_var
+    print(search_store.search_by_keyword)
+
+def create_ratings_frame(window,search_store):
+    ratings_frame = tk.Frame(window)
+    ratings_frame.grid(row=1, column=1)
+    #######
+    checked_ratings_set = set({})
+    ratings_path_str = "./FileInfo/Associations/rating_associations.txt"
+
+    #path_pointer = Path(ratings_path_str)#dont need to go searching every file. it's all in one
+    #pointer_contents = os.scandir(path_pointer)
+    root.title("File Searcher")
+    check_boxes = []
+    #pc = list(pointer_contents)
+    lambdas = []
+    ratings_checked_vars = []
+    ratings = ["unrated"]+[str(i) for i in range(11)]
+
+
+    for i in range(len(ratings)):
+        v = tk.BooleanVar()
+        ratings_checked_vars.append(v)
+        this_rating = ratings[i]
+        lambdas.append(create_ratings_check_lambda(v, checked_ratings_set, this_rating,search_store))
+
+    for i in range(12):
+        b = tk.Checkbutton(ratings_frame, text=ratings[i], \
+                           command=lambdas[i], \
+                           variable=ratings_checked_vars[i], \
+                           onvalue=True, offvalue=False)
+        b.var = ratings_checked_vars[i]
+        b.pack()
+        check_boxes.append(b)
+
+    #######
+    rating_var = tk.BooleanVar()
+
+    def change_rating_var(window, rating_var,search_store):
+        rating_var.set(not rating_var.get())
+        rating_frame(window, rating_var.get(),search_store)
+
+    rating_check = tk.Checkbutton(window, text="Search by Rating", \
+                                   command=lambda: change_rating_var(window, rating_var,search_store), \
+                                   variable=rating_var, \
+                                   onvalue=True, offvalue=False)
+
+    rating_check.var = rating_var
+    rating_check.grid(row=0, column=1)
+
+
+
 def search(search_store):
     file_set = set({})
     if search_store.search_all == False:
@@ -260,16 +334,35 @@ def search(search_store):
     for num in list(file_set):
         with open(f'./FileInfo/FileNums/{num}.txt', 'r') as f:
             paths.append(f.readline()[5:-1])
+
+    search_results_window(paths)
+
+
+
+def search_results_window(paths):
+    window = tk.Tk()
+    labels = []
+    for path in paths:
+        l = tk.Label(window, text=path)
+        labels.append(l)
+        l.pack()
+
+    close_button = tk.Button(window, text="Close", command=window.destroy)
+    close_button.pack()
+    window.mainloop()
     print(paths)
 
 def file_searcher():
     print("searching")
     window = tk.Tk()
-    search_store = Search_Store()
+    search_store = Search_Store()#The object to keep the garbage collector from eating my stuff
     create_keywords_frame(window,search_store)
+    create_ratings_frame(window,search_store)
 
     search_button = tk.Button(window,text="Search",command=lambda:search(search_store))
     search_button.grid(row = 2, column=0)
+    close_button = tk.Button(window, text="End Searching", command=window.destroy)
+    close_button.grid(row=3,column=0)
 
 
 
@@ -296,7 +389,7 @@ file_searcher_button.pack(expand=True)
 close_button = ttk.Button(
     root,
     text='End Program',
-    command=root.destroy#doesnt actually end the program.  Use something else?
+    command=exit #doesnt actually end the program.  Use something else?<--like exit()...duh
 )
 
 close_button.pack(expand=True)
