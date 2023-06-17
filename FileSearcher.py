@@ -330,6 +330,23 @@ def search(search_store):
                 with open(f'./FileInfo/Associations/KeywordAssociations/{keyword}.txt','r') as f:
                     for line in f.readlines():
                         file_set = file_set.union(line[1:-2])
+        if search_store.search_by_rating:
+            with open(f'./FileInfo/Associations/rating_associations.txt', 'r') as f:
+                for line in f.readlines():
+                    num = line[:line.find(':')]
+                    if num in search_store.rating_set:
+                        all_nums = line[line.find(':')+1:]
+                        all_nums = all_nums.replace('--',',')
+                        all_nums = all_nums.replace('-', '')
+                        all_nums = all_nums.replace('\n', '')
+                        all_nums = all_nums.split(',')
+                        print(all_nums)
+                        file_set = file_set.union(set(all_nums))
+
+
+
+
+    #results
     paths = []
     for num in list(file_set):
         with open(f'./FileInfo/FileNums/{num}.txt', 'r') as f:
