@@ -11,6 +11,7 @@ from tkinter import filedialog as fd
 from tkinter.messagebox import showinfo
 from FileObject import FileObject
 from pathlib import Path
+from sys import exit
 
 
 class Search_Store():
