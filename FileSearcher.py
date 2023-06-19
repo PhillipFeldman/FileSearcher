@@ -16,7 +16,7 @@ from pathlib import Path
 class Search_Store():
     def __init__(self):
         self.keyword_set = set({})
-        self.search_all = False
+        self.search_all = True
         self.rating_set = set({})
         self.search_by_keyword = False
         self.search_by_rating = False
@@ -321,6 +321,31 @@ def create_ratings_frame(window,search_store):
     rating_check.grid(row=0, column=1)
 
 
+def create_search_all_any_frame(window,search_store):
+    radio_frame = tk.Frame(window)
+    radio_frame.grid(row=1, column=3)
+    r = tk.BooleanVar()
+    r.set(True)
+
+    def changed_radio(value,search_store):
+        print(value)
+        search_store.search_all = value
+
+    def create_lambda_any(value,search_store):
+        value.set(False)
+        changed_radio(value.get(),search_store)
+
+    def create_lambda_all(value,search_store):
+        value.set(True)
+        changed_radio(value.get(),search_store)
+
+    radio_button_any = tk.Radiobutton(radio_frame, text = "Search by any keyword and rating",\
+                                      variable = r,value = True,command=lambda : create_lambda_any(r,search_store))
+    radio_button_all = tk.Radiobutton(radio_frame, text="Search by all keywords and rating",\
+                                      variable = r,value = False,command=lambda : create_lambda_all(r,search_store))
+    radio_button_any.pack()
+    radio_button_all.pack()
+
 
 def search(search_store):
     file_set = set({})
@@ -369,12 +394,16 @@ def search_results_window(paths):
     window.mainloop()
     print(paths)
 
+
+
+
 def file_searcher():
     print("searching")
     window = tk.Tk()
     search_store = Search_Store()#The object to keep the garbage collector from eating my stuff
     create_keywords_frame(window,search_store)
     create_ratings_frame(window,search_store)
+    create_search_all_any_frame(window,search_store)
 
     search_button = tk.Button(window,text="Search",command=lambda:search(search_store))
     search_button.grid(row = 2, column=0)
