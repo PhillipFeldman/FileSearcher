@@ -1,2 +1,7 @@
 1:C:/Users/phill/Pictures/art/shirtPic.jfif
 2:C:/Users/phill/Pictures/art/shirtpic.jpeg
+3:C:/Users/phill/Desktop/ToCopy/Resume/Resume/Phillip_Feldman-Resume-2023.pdf
+4:C:/Users/phill/Desktop/ToCopy/Resume/Resume/Phillip_Feldman_Resume2021.pdf
+5:C:/Users/phill/Desktop/ToCopy/Resume/Resume/resume.html
+6:C:/Users/phill/Desktop/ToCopy/Resume/Resume/resumeTest1.pdf
+7:C:/Users/phill/Desktop/ToCopy/Resume/Resume/styles.css
