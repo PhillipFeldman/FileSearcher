@@ -354,7 +354,7 @@ def search(search_store):
             for keyword in search_store.keyword_set:
                 with open(f'./FileInfo/Associations/KeywordAssociations/{keyword}.txt','r') as f:
                     for line in f.readlines():
-                        file_set = file_set.union(line[1:-2])
+                        file_set = file_set.union({line[1:-2]})
         if search_store.search_by_rating:
             with open(f'./FileInfo/Associations/rating_associations.txt', 'r') as f:
                 for line in f.readlines():
@@ -375,7 +375,7 @@ def search(search_store):
                 this_keyword_set = set({})
                 with open(f'./FileInfo/Associations/KeywordAssociations/{keyword}.txt','r') as f:
                     for line in f.readlines():
-                        this_keyword_set = this_keyword_set.union(line[1:-2])
+                        this_keyword_set = this_keyword_set.union({line[1:-2]})
                 sets.append(this_keyword_set)
         if search_store.search_by_rating:
             if len(search_store.rating_set )!= 1:
@@ -402,8 +402,6 @@ def search(search_store):
                 file_set = file_set.intersection(s)
         except IndexError:
             pass
-
-
 
 
 
