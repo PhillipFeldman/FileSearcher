@@ -1,4 +1,0 @@
-PATH:C:/Users/phill/Desktop/ToCopy/Resume/Resume/resume.html
-RATING:5
-KEYWORDS:
-resume

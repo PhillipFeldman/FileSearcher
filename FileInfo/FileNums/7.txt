@@ -1,4 +1,0 @@
-PATH:C:/Users/phill/Desktop/ToCopy/Resume/Resume/styles.css
-RATING:1
-KEYWORDS:
-styles

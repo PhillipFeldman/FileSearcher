@@ -1,5 +1,0 @@
-PATH:C:/Users/phill/Pictures/art/shirtPic.jfif
-RATING:unrated
-KEYWORDS:
-shirts
-heartNY

@@ -1,5 +1,0 @@
-PATH:C:/Users/phill/Pictures/art/shirtpic.jpeg
-RATING:unrated
-KEYWORDS:
-shirts
-heartNY
