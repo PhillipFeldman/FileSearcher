@@ -368,6 +368,43 @@ def search(search_store):
                         print(all_nums)
                         file_set = file_set.union(set(all_nums))
 
+    else:
+        sets = []
+        if search_store.search_by_keyword:
+            for keyword in search_store.keyword_set:
+                this_keyword_set = set({})
+                with open(f'./FileInfo/Associations/KeywordAssociations/{keyword}.txt','r') as f:
+                    for line in f.readlines():
+                        this_keyword_set = this_keyword_set.union(line[1:-2])
+                sets.append(this_keyword_set)
+        if search_store.search_by_rating:
+            if len(search_store.rating_set )!= 1:
+                pass
+            else:
+                with open(f'./FileInfo/Associations/rating_associations.txt', 'r') as f:
+                    this_rating_set = set({})
+                    for line in f.readlines():
+                        num = line[:line.find(':')]
+                        if num in search_store.rating_set:
+                            all_nums = line[line.find(':')+1:]
+                            all_nums = all_nums.replace('--',',')
+                            all_nums = all_nums.replace('-', '')
+                            all_nums = all_nums.replace('\n', '')
+                            all_nums = all_nums.split(',')
+                            print(all_nums)
+                            this_rating_set = this_rating_set.union(set(all_nums))
+                            break
+                    sets.append(this_rating_set)
+
+        try:
+            file_set = sets[0]
+            for s in sets:
+                file_set = file_set.intersection(s)
+        except IndexError:
+            pass
+
+
+
 
 
 
