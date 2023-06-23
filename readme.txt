@@ -20,3 +20,7 @@ Click the radio button to "Search by all keywords and rating" or "Search by any 
 The "Search by all keywords and rating" option will return files that are tagged with every keyword and rating selected
 The "Search by any keywords and rating" option will return files that are tagged with any keyword and rating selected
 The absolute path(s) to the desired file(s) will pop up.
+
+Known Bugs/Fixes:
+-Requires you to create an empty repository in 'Associations' named 'KeywordAssociations'
+-If you move a file once it's been tagged, the program will not work as intended.
