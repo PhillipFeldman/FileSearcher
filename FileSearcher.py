@@ -13,6 +13,7 @@ from FileObject import FileObject
 from pathlib import Path
 from sys import exit
 
+Path("./FileInfo/Associations/KeywordAssociations").mkdir(parents=True, exist_ok=True)
 
 class Search_Store():
     def __init__(self):
