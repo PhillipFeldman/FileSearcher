@@ -1,3 +1,4 @@
+
 """
 Found possible issue: if the filename contains a character that isn't utf-8,
 Such as an accent over a vowel in Spanish,  I get the following character �.
@@ -13,6 +14,7 @@ from FileObject import FileObject
 from pathlib import Path
 from sys import exit
 
+Path("./FileInfo/Associations/KeywordAssociations").mkdir(parents=True, exist_ok=True)
 
 class Search_Store():
     def __init__(self):
@@ -40,7 +42,7 @@ def load_all_files():
     return set(file_arr[:-1])
 
 file_set = load_all_files()
-print(file_set)
+#print(file_set)
 
 def complete_add_keywords(filenames,keyword):
     global file_set
@@ -64,7 +66,7 @@ def add_keywords(filenames,str_filenames):
     add_button = tk.Button(add_window,text="Add the keyword to the file(s)",\
                            command= lambda:complete_add_keywords(filenames,e.get()))
     add_button.pack()
-    print("keywords",filenames)
+    #print("keywords",filenames)
     close_button = tk.Button(add_window,text="Done adding keywords",command=add_window.destroy)
     close_button.pack()
 
@@ -115,7 +117,7 @@ def rate_file(filenames,str_filenames):
     label.pack(expand=True)
     clicked = tk.StringVar()
     answer_choices = ["unrated"]+[str(i) for i in range(11)]
-    print(answer_choices)
+    #print(answer_choices)
     clicked.set(answer_choices[0])
     drop = ttk.OptionMenu(rate_window,clicked,*answer_choices)
     drop.pack(expand=True)
@@ -179,11 +181,13 @@ def file_explorer():
 def keyword_frame(window,keyword_var,search_store):
 
     if (keyword_var):
-        print("keyword checked")
+        pass
+        #print("keyword checked")
     else:
-        print("unchecked")
+        pass
+        #print("unchecked")
     search_store.search_by_keyword = keyword_var
-    print(search_store.search_by_keyword)
+    #print(search_store.search_by_keyword)
 
 
 def add_remove_keyword(var,keyword_set,keyword,search_store):
@@ -195,7 +199,7 @@ def add_remove_keyword(var,keyword_set,keyword,search_store):
 
 
     search_store.keyword_set = keyword_set
-    print(keyword_set)
+    #print(keyword_set)
 
 
 def add_remove_rating(var,ratings_set,rating,search_store):
@@ -207,7 +211,7 @@ def add_remove_rating(var,ratings_set,rating,search_store):
 
 
     search_store.rating_set = ratings_set
-    print(ratings_set)
+    #print(ratings_set)
 
 def create_keyword_check_lambda(var,keyword_set,keyword,search_store):
     return lambda: add_remove_keyword(var,keyword_set,keyword,search_store)
@@ -268,11 +272,13 @@ def create_keywords_frame(window,search_store):
 def rating_frame(window,rating_var,search_store):
 
     if (rating_var):
-        print("keyword checked")
+        pass
+        #print("keyword checked")
     else:
-        print("unchecked")
+        pass
+        #print("unchecked")
     search_store.search_by_rating = rating_var
-    print(search_store.search_by_keyword)
+    #print(search_store.search_by_keyword)
 
 def create_ratings_frame(window,search_store):
     ratings_frame = tk.Frame(window)
@@ -329,7 +335,7 @@ def create_search_all_any_frame(window,search_store):
     r.set(True)
 
     def changed_radio(value,search_store):
-        print(value)
+        #print(value)
         search_store.search_all = value
 
     def create_lambda_any(value,search_store):
@@ -366,7 +372,7 @@ def search(search_store):
                         all_nums = all_nums.replace('-', '')
                         all_nums = all_nums.replace('\n', '')
                         all_nums = all_nums.split(',')
-                        print(all_nums)
+                        #print(all_nums)
                         file_set = file_set.union(set(all_nums))
 
     else:
@@ -392,7 +398,7 @@ def search(search_store):
                             all_nums = all_nums.replace('-', '')
                             all_nums = all_nums.replace('\n', '')
                             all_nums = all_nums.split(',')
-                            print(all_nums)
+                            #print(all_nums)
                             this_rating_set = this_rating_set.union(set(all_nums))
                             break
                     sets.append(this_rating_set)
@@ -428,13 +434,13 @@ def search_results_window(paths):
     close_button = tk.Button(window, text="Close", command=window.destroy)
     close_button.pack()
     window.mainloop()
-    print(paths)
+    #print(paths)
 
 
 
 
 def file_searcher():
-    print("searching")
+    #print("searching")
     window = tk.Tk()
     search_store = Search_Store()#The object to keep the garbage collector from eating my stuff
     create_keywords_frame(window,search_store)
